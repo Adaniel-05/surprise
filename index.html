@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>she</title>
+  <title>Bienvenida amor ❤️</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     canvas {
@@ -21,7 +21,7 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
     .arco {
-      width: 80px;
+      width: 100px;
       height: 70px;
       border: 12px solid #f472b6;
       border-bottom: none;
@@ -78,12 +78,13 @@
       </div>
     </div>
     <button onclick="checkCode()" class="bg-pink-500 text-white px-4 py-2 rounded-xl shadow-md">Abrir candado</button>
-    <p id="errorMsg" class="text-red-500 hidden">Código incorrecto :/</p>
+    <p id="errorMsg" class="text-red-500 hidden">Código incorrecto 💔</p>
+    <p class="text-sm text-pink-800 italic">Pista: dos cumpleaños N y D 🎂</p>
   </div>
 
   <!-- segunda pag -->
   <div id="scratchCard" class="hidden flex flex-col items-center">
-    <h2 class="text-2xl mb-2 text-pink-700">Desliza con tu dedo 💕</h2>
+    <h2 class="text-2xl mb-2 text-pink-700">Ráscame con amor 💕</h2>
     <div class="relative">
       <img id="hiddenImage" src="img1.jpg" alt="Sorpresa" class="w-80 h-80 object-cover rounded-2xl shadow-lg">
       <canvas id="scratchCanvas" class="absolute top-0 left-0 w-80 h-80 rounded-2xl"></canvas>
@@ -91,7 +92,7 @@
   </div>
 
   <script>
-    const correctCode = [0,9,0,5]; // código
+    const correctCode = [0,9,0,5]; // código 
     const digits = [0,0,0,0];
 
     function changeDigit(index, dir) {
