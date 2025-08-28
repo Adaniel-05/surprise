@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>she</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    canvas {
+      touch-action: none;
+    }
+    .candado {
+      width: 160px;
+      height: 200px;
+      background: #f9a8d4;
+      border-radius: 15px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .arco {
+      width: 80px;
+      height: 70px;
+      border: 12px solid #f472b6;
+      border-bottom: none;
+      border-radius: 50px 50px 0 0;
+      position: absolute;
+      top: -70px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: transparent;
+    }
+    .digit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 4px;
+    }
+    .digit span {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #831843;
+      width: 30px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-center h-screen bg-pink-100">
+
+  <!-- primera pag -->
+  <div id="lockScreen" class="flex flex-col items-center gap-6">
+    <h1 class="text-3xl font-bold text-pink-700 mb-6">Bienvenida amor ❤️</h1>
+    <div class="candado">
+      <div class="arco"></div>
+      <div class="flex">
+        <div class="digit">
+          <button onclick="changeDigit(0,1)" class="px-1 text-pink-700">▲</button>
+          <span id="d0">0</span>
+          <button onclick="changeDigit(0,-1)" class="px-1 text-pink-700">▼</button>
+        </div>
+        <div class="digit">
+          <button onclick="changeDigit(1,1)" class="px-1 text-pink-700">▲</button>
+          <span id="d1">0</span>
+          <button onclick="changeDigit(1,-1)" class="px-1 text-pink-700">▼</button>
+        </div>
+        <div class="digit">
+          <button onclick="changeDigit(2,1)" class="px-1 text-pink-700">▲</button>
+          <span id="d2">0</span>
+          <button onclick="changeDigit(2,-1)" class="px-1 text-pink-700">▼</button>
+        </div>
+        <div class="digit">
+          <button onclick="changeDigit(3,1)" class="px-1 text-pink-700">▲</button>
+          <span id="d3">0</span>
+          <button onclick="changeDigit(3,-1)" class="px-1 text-pink-700">▼</button>
+        </div>
+      </div>
+    </div>
+    <button onclick="checkCode()" class="bg-pink-500 text-white px-4 py-2 rounded-xl shadow-md">Abrir candado</button>
+    <p id="errorMsg" class="text-red-500 hidden">Código incorrecto :/</p>
+  </div>
+
+  <!-- segunda pag -->
+  <div id="scratchCard" class="hidden flex flex-col items-center">
+    <h2 class="text-2xl mb-2 text-pink-700">Desliza con tu dedo 💕</h2>
+    <div class="relative">
+      <img id="hiddenImage" src="img1.jpg" alt="Sorpresa" class="w-80 h-80 object-cover rounded-2xl shadow-lg">
+      <canvas id="scratchCanvas" class="absolute top-0 left-0 w-80 h-80 rounded-2xl"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const correctCode = [0,9,0,5]; // código
+    const digits = [0,0,0,0];
+
+    function changeDigit(index, dir) {
+      digits[index] = (digits[index] + dir + 10) % 10;
+      document.getElementById("d"+index).innerText = digits[index];
+    }
+
+    function checkCode() {
+      if (digits.every((d,i) => d === correctCode[i])) {
+        document.getElementById("lockScreen").classList.add("hidden");
+        document.getElementById("scratchCard").classList.remove("hidden");
+        initScratch();
+      } else {
+        document.getElementById("errorMsg").classList.remove("hidden");
+      }
+    }
+
+    function initScratch() {
+      const canvas = document.getElementById("scratchCanvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+
+      ctx.fillStyle = "#aaa";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      let scratching = false;
+
+      function scratch(x, y) {
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.beginPath();
+        ctx.arc(x, y, 20, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      canvas.addEventListener("mousedown", e => {
+        scratching = true;
+        scratch(e.offsetX, e.offsetY);
+      });
+      canvas.addEventListener("mousemove", e => {
+        if (scratching) scratch(e.offsetX, e.offsetY);
+      });
+      canvas.addEventListener("mouseup", () => scratching = false);
+
+      canvas.addEventListener("touchstart", e => {
+        e.preventDefault();
+        scratching = true;
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        scratch(touch.clientX - rect.left, touch.clientY - rect.top);
+      });
+      canvas.addEventListener("touchmove", e => {
+        e.preventDefault();
+        if (scratching) {
+          const rect = canvas.getBoundingClientRect();
+          const touch = e.touches[0];
+          scratch(touch.clientX - rect.left, touch.clientY - rect.top);
+        }
+      });
+      canvas.addEventListener("touchend", () => scratching = false);
+    }
+  </script>
+
+</body>
+</html>
